@@ -48,6 +48,12 @@ Version|Date|Comments
 
 > Include any additional steps as needed.
 
+npm install @pnp/spfx-controls-react --save
+npm install @pnp/spfx-property-controls --save
+npm install @pnp/sp --save
+
+
+
 ## Features
 Modified version of this example:  https://github.com/pnp/sp-dev-fx-webparts/tree/main/samples/react-script-editor
 

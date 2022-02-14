@@ -15,6 +15,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 import { IScriptEditorProps } from './components/IScriptEditorProps';
 import PropertyPaneLogo from './PropertyPaneLogo';
 
+import { loadHTMLFile } from './LoadHTML';
 
 export interface IScriptEditorWebPartProps {
   script: string;
@@ -32,6 +33,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   constructor() {
       super();
       this.scriptUpdate = this.scriptUpdate.bind(this);
+
   }
 
   public scriptUpdate(_property: string, _oldVal: string, newVal: string) {
