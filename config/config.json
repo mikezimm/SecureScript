@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "secure-script-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/secureScript/SecureScriptWebPart.js",
+          "manifest": "./src/webparts/secureScript/SecureScriptWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SecureScriptWebPartStrings": "lib/webparts/secureScript/loc/{locale}.js"
+  }
+}
