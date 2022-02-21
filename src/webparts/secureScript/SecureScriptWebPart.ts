@@ -47,8 +47,12 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
     //   this._propertyPaneHelper.initialValue = newVal;
   }
 
-  public render(): void {
+//   public render(): void {
+  public async render() {
+    let start = new Date();
+
     console.log('Secure trace:  render');
+    let updatedSnippet = await fetchSnippet( '/sites/TestScriptandFiles/SiteAssets/SimpleSample.html', this.context );
       this._unqiueId = this.context.instanceId;
       if (this.displayMode == DisplayMode.Read) {
           if (this.properties.removePadding) {
@@ -68,11 +72,14 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
           }
 
           ReactDom.unmountComponentAtNode(this.domElement);
-          this.domElement.innerHTML = this.properties.script;
+        //   this.domElement.innerHTML = this.properties.script;
+          this.domElement.innerHTML = updatedSnippet;
           this.executeScript(this.domElement);
       } else {
           this.renderEditor();
       }
+      let end = new Date();
+      console.log('Time to laod', end.getTime() - start.getTime() );
   }
 
   private async renderEditor() {
