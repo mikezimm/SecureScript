@@ -3,7 +3,7 @@
   "solution": {
     "name": "secure-script-editor-client-side-solution",
     "id": "6fff5ca2-d0ac-44dd-87f2-bb2622d19f63",
-    "version": "1.0.0.0",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {
