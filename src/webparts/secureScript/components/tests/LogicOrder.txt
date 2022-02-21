@@ -1,0 +1,65 @@
+
+This is the order during normal loading
+SecureScriptWebPart.ts:36 Secure trace:  constructor
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:203 Secure trace:  executeScript
+SecureScriptWebPart.ts:165 Secure trace:  evalScript
+
+This is what happens when I hit the edit page button
+
+Secure trace:  constructor
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:75 Secure trace:  renderEditor
+
+loadHTMLFile Error
+LoadHTML.ts:15 Error: Error making HttpClient request in queryable [404]  ::> 
+    at new HttpRequestError (parsers.js:130:1)
+    at Function.<anonymous> (parsers.js:145:1)
+    at step (tslib.es6.js:102:1)
+    at Object.next (tslib.es6.js:83:45)
+
+This is what happens when I hit Edit Markup
+SecureScriptWebPart.ts:98 Secure trace:  loadPropertyPaneResources
+SecureScriptWebPart.ts:118 Secure trace:  getPropertyPaneConfiguration
+
+After I update the markup and hit save 
+
+scriptSecure trace:  scriptUpdate
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:75 Secure trace:  renderEditor
+SecureScriptWebPart.ts:118 Secure trace:  getPropertyPaneConfiguration
+
+LoadHTML.ts:14 loadHTMLFile Error
+LoadHTML.ts:15 Error: Error making HttpClient request in queryable [404]  ::> 
+
+
+Then republishing the page (also reloads)
+Secure trace:  constructor
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:203 Secure trace:  executeScript
+SecureScriptWebPart.ts:165 Secure trace:  evalScript
+
+After saving buggy script
+Secure trace:  scriptUpdate
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:75 Secure trace:  renderEditor
+SecureScriptWebPart.ts:118 Secure trace:  getPropertyPaneConfiguration
+
+LoadHTML.ts:14 loadHTMLFile Error
+LoadHTML.ts:15 Error: Error making HttpClient request in queryable [404]  ::> 
+
+After publishing buggy script
+Secure trace:  constructor
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:203 Secure trace:  executeScript
+SecureScriptWebPart.ts:165 Secure trace:  evalScript
+
+This is loading error after I added more detail logging
+Secure trace:  constructor
+SecureScriptWebPart.ts:47 Secure trace:  render
+SecureScriptWebPart.ts:203 Secure trace:  executeScript
+SecureScriptWebPart.ts:278 Secure trace:  evalScript 0 <script type=​"text/​javascript">​        //This is where I had single quotes  that caused the issue running the code
+        alert('Hi buggy");</script>​
+SecureScriptWebPart.ts:165 Secure trace:  evalScript
+VM501:3 Uncaught SyntaxError: Invalid or unexpected token
+    at SecureScriptWebPart.oTPx.SecureScriptWebPart.evalScript (SecureScriptWebPart.ts:190:15)
