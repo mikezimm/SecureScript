@@ -16,6 +16,7 @@ import { IScriptEditorProps } from './components/IScriptEditorProps';
 import PropertyPaneLogo from './PropertyPaneLogo';
 
 import { loadHTMLFile } from './LoadHTML';
+import { fetchSnippet } from './loadDangerous';
 
 export interface IScriptEditorWebPartProps {
   script: string;
@@ -33,15 +34,21 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   constructor() {
       super();
       this.scriptUpdate = this.scriptUpdate.bind(this);
+      console.log('Secure trace:  constructor');
 
   }
 
-  public scriptUpdate(_property: string, _oldVal: string, newVal: string) {
-      this.properties.script = newVal;
-      this._propertyPaneHelper.initialValue = newVal;
+  public async scriptUpdate(_property: string, _oldVal: string, newVal: string) {
+      console.log('Secure trace:  scriptUpdate');
+      let updatedSnippet = await fetchSnippet( '/sites/TestScriptandFiles/SiteAssets/SimpleSample.html', this.context );
+      this.properties.script = updatedSnippet;
+      this._propertyPaneHelper.initialValue = updatedSnippet;
+    //   this.properties.script = newVal;
+    //   this._propertyPaneHelper.initialValue = newVal;
   }
 
   public render(): void {
+    console.log('Secure trace:  render');
       this._unqiueId = this.context.instanceId;
       if (this.displayMode == DisplayMode.Read) {
           if (this.properties.removePadding) {
@@ -69,6 +76,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   }
 
   private async renderEditor() {
+        console.log('Secure trace:  renderEditor');
       // Dynamically load the editor pane to reduce overall bundle size
       const editorPopUp = await import(
           /* webpackChunkName: 'scripteditor' */
@@ -91,6 +99,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   }
 
   protected async loadPropertyPaneResources(): Promise<void> {
+        console.log('Secure trace:  loadPropertyPaneResources');
       //import { PropertyFieldCodeEditor, PropertyFieldCodeEditorLanguages } from '@pnp/spfx-property-controls/lib/PropertyFieldCodeEditor';
       const editorProp = await import(
           /* webpackChunkName: 'scripteditor' */
@@ -110,6 +119,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    console.log('Secure trace:  getPropertyPaneConfiguration');
       let webPartOptions: IPropertyPaneField<any>[] = [
           PropertyPaneTextField("title", {
               label: "Title to show in edit mode",
@@ -156,6 +166,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
 
 
   private evalScript(elem) {
+        console.log('Secure trace:  evalScript');
       const data = (elem.text || elem.textContent || elem.innerHTML || "");
       const headTag = document.getElementsByTagName("head")[0] || document.documentElement;
       const scriptTag = document.createElement("script");
@@ -184,6 +195,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   }
 
   private nodeName(elem, name) {
+    console.log('Secure trace:  nodeName');
       return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
   }
 
@@ -192,6 +204,7 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
   //
   // Argument element is an element in the dom.
   private async executeScript(element: HTMLElement) {
+        console.log('Secure trace:  executeScript');
       // clean up added script tags in case of smart re-load
       const headTag = document.getElementsByTagName("head")[0] || document.documentElement;
       let scriptTags = headTag.getElementsByTagName("script");
@@ -243,13 +256,17 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
       }
 
       for (let i = 0; i < urls.length; i++) {
+         let scriptUrl: any = [];
+         let prefix = '';
           try {
-              let scriptUrl = urls[i];
+            scriptUrl = urls[i];
               // Add unique param to force load on each run to overcome smart navigation in the browser as needed
-              const prefix = scriptUrl.indexOf('?') === -1 ? '?' : '&';
+              prefix = scriptUrl.indexOf('?') === -1 ? '?' : '&';
               scriptUrl += prefix + 'pnp=' + new Date().getTime();
               await SPComponentLoader.loadScript(scriptUrl, { globalExportsName: "ScriptGlobal" });
           } catch (error) {
+            console.log('Secure trace:  error executeScript-prefix ', prefix);
+            console.log('Secure trace:  error executeScript-scriptUrl ', scriptUrl);
               if (console.error) {
                   console.error(error);
               }
@@ -262,6 +279,8 @@ export default class SecureScriptWebPart extends BaseClientSideWebPart<IScriptEd
       for (let i = 0; scripts[i]; i++) {
           const scriptTag = scripts[i];
           if (scriptTag.parentNode) { scriptTag.parentNode.removeChild(scriptTag); }
+          console.log('Secure trace:  evalScript ' + i, scripts[i]);
+
           this.evalScript(scripts[i]);
       }
       // execute any onload people have added
